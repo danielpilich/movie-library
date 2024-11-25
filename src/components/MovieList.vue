@@ -16,6 +16,11 @@ import MovieItem from './MovieItem.vue';
         ].filter(movie => movie && movie.id && movie.title)
       };
     },
+    methods: {
+    removeMovie(id) {
+      this.movies = this.movies.filter(movie => movie.id !== id);
+    }
+  },
     async mounted() {
       const response = await fetch('https://jsonplaceholder.typicode.com/todos');
       const data = await response.json();
@@ -27,6 +32,12 @@ import MovieItem from './MovieItem.vue';
 
 <template>
     <div id="movie-list">
-        <MovieItem v-for="movie in movies" v-bind:key="movie.id" v-bind:movie="movie" class="movie-item" />
+        <MovieItem 
+        v-for="movie in movies" 
+        v-bind:key="movie.id" 
+        v-bind:movie="movie" 
+        @remove-movie="removeMovie"
+        @edit-movie="editMovie"
+        class="movie-item" />
     </div>
 </template>
