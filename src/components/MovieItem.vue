@@ -3,31 +3,34 @@
     <h2>{{ movie.title }}</h2>
     <h2>{{ movie.id }}</h2>
     <div class="button-container">
-      <button @click="editMovie">Edit</button>
+      <button @click="showEditMovieModal = true">Edit</button>
       <button @click="showDeleteMovieModal = true">Remove</button>
     </div>
     <DeleteMovieModal v-if="showDeleteMovieModal" :show="showDeleteMovieModal" :movie="movie" @confirm-delete="deleteMovie" @cancel="showDeleteMovieModal = false" />
+    <EditMovieModal v-if="showEditMovieModal" :show="showEditMovieModal" :movie="movie" @edit-movie="editMovie" @cancel="showEditMovieModal = false" />
   </div>
 </template>
 
 <script>
 import DeleteMovieModal from './DeleteMovieModal.vue';
+import EditMovieModal from './EditMovieModal.vue';
 
 export default {
-  components: { DeleteMovieModal },
+  components: { DeleteMovieModal, EditMovieModal },
   props: ['movie'],
   data() {
     return {
-      showDeleteMovieModal: false
+      showDeleteMovieModal: false,
+      showEditMovieModal: false
     }
   },
   methods: {
     deleteMovie() {
       this.$emit('delete-movie', this.movie.id);
     },
-    editMovie() {
-      this.$emit('edit-movie', this.movie);
-    }
+    editMovie(movie) {
+    this.$emit('edit-movie', movie);
+  }
   }
 }
 </script>
