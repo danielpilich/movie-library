@@ -1,11 +1,11 @@
 <script>
 import Header from './components/Header.vue'
-import MovieList from './components/MovieList.vue'
+import Main from './components/Main.vue'
 
 export default {
   components: {
     Header,
-    MovieList
+    Main
   }
 }  
 </script>
@@ -13,6 +13,6 @@ export default {
 <template>
   <div id="app">
     <Header />
-    <MovieList />
+    <Main />
   </div>   
 </template>
