@@ -1,0 +1,7 @@
+@movie_library.Server_HostAddress = http://localhost:5118
+
+
+GET {{VueApp2.Server_HostAddress}}/mymovies/
+Accept: application/json
+
+###
