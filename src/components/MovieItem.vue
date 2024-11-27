@@ -2,6 +2,9 @@
   <div id="movie">
     <h2>{{ movie.title }}</h2>
     <h2>{{ movie.id }}</h2>
+    <p>Director: {{ movie.director }}</p>
+    <p>Year: {{ movie.year }}</p>
+    <p>Rate: {{ movie.rate }}/10</p>
     <div class="button-container">
       <button @click="showEditMovieModal = true">Edit</button>
       <button @click="showDeleteMovieModal = true">Remove</button>
