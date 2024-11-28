@@ -32,7 +32,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, maxLength, between } from '@vuelidate/validators'
 
 export default {
   props: ['show'],
@@ -52,10 +52,10 @@ export default {
   validations () {
     return {
       newMovie: {
-      title: { required },
-      director: { required },
-      year: { required },
-      rate: { required }
+        title: { required, maxLength: maxLength(200) },
+        director: {  },
+        year: { required, between: between(1900, 2200) },
+        rate: { between: between(0, 10) }
     }
     }
   },
