@@ -59,7 +59,7 @@ hr{
   margin-left: 0;
 }
 
-.modal-overlay {
+.modal-box-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -71,7 +71,7 @@ hr{
   align-items: center;
 }
 
-.modal {
+.modal-box {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;

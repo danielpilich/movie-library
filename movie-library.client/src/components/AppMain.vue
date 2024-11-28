@@ -61,7 +61,7 @@
 <template>
   <div id="app-main">
     <button @click="getMovies">Get Movies</button>
-    <button @click="showAddMovieModal = true">Add Movie</button>
+    <button class="btn btn-primary" @click="showAddMovieModal = true">Add Movie</button>
     <AddMovieModal v-if="showAddMovieModal" :show="showAddMovieModal" @add-movie="addMovie" @cancel="showAddMovieModal = false" />
     <hr>
     <div id="movie-list">

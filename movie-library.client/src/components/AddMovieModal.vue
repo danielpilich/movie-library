@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-overlay" v-if="show">
-    <div class="modal">
+  <div class="modal-box-overlay" v-if="show">
+    <div class="modal-box">
       <h2>Add Movie</h2>
       <form @submit.prevent="addMovie">
   <label for="title">Title:</label>
