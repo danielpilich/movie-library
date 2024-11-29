@@ -1,6 +1,7 @@
 <script>
 import AddMovieModal from "./AddMovieModal.vue";
 import MovieItem from "./MovieItem.vue";
+import apiClient from "@/server.config";
 
 export default {
   components: {
@@ -9,51 +10,28 @@ export default {
   },
   data() {
     return {
-      post: null,
-      newMovie: "",
+      post: [],
+      newMovies: [],
+      movies: [],
       addMovieMessageSent: false,
-
-      movies: [
-        {
-          id: 1,
-          title: "The Matrix",
-          director: "The Wachowskis",
-          year: 1999,
-          rate: 8.7,
-        },
-        {
-          id: 2,
-          title: "The Matrix Reloaded",
-          director: "The Wachowskis",
-          year: 2003,
-          rate: 7.5,
-        },
-        {
-          id: 3,
-          title: "The Matrix Revolutions",
-          director: "The Wachowskis",
-          year: 2003,
-          rate: 7.2,
-        },
-        {
-          id: 4,
-          title: "The Matrix Resurrections",
-          director: "Lana Wachowski",
-          year: 2021,
-          rate: 6.8,
-        },
-        {
-          id: 5,
-          title: "Gladiator",
-          director: "Ridley Scott",
-          year: 2000,
-          rate: 8.5,
-        },
-      ],
+      error: null,
     };
   },
   methods: {
-    addMovieTest(newMovie) {
+    async getMovies() {
+      try {
+        const response = await apiClient.get("/");
+        this.newMovies = response.data.filter(
+          (movie) => !this.movies.some((m) => m.id === movie.id)
+        );
+        this.movies = [...this.movies, ...this.newMovies];
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        this.error = "Failed to load movies.";
+      }
+    },
+
+    addMovie(newMovie) {
       if (newMovie) {
         this.newMovie = newMovie;
         const newMovieId =
@@ -86,24 +64,8 @@ export default {
       if (id) {
         this.movies = this.movies.filter((movie) => movie.id !== id);
       }
-    },
-    async getMovies() {
-      this.post = null;
-
-      try {
-        const response = await fetch("mymovies");
-        const json = await response.json();
-        this.post = json;
-
-        const newMovies = this.post.filter(
-          (movie) => !this.movies.some((m) => m.id === movie.id)
-        );
-        this.movies = [...this.movies, ...newMovies];
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -128,7 +90,7 @@ export default {
       </button>
     </div>
     
-    <AddMovieModal @add-movie="addMovieTest" />
+    <AddMovieModal @add-movie="addMovie" />
 
     <hr />
 
