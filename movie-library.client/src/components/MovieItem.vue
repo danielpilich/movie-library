@@ -1,39 +1,55 @@
 <template>
-  <div id="movie">
-    <h2>{{ movie.title }}</h2>
-    <h2>{{ movie.id }}</h2>
-    <p>Director: {{ movie.director }}</p>
-    <p>Year: {{ movie.year }}</p>
-    <p>Rate: {{ movie.rate }}/10</p>
-    <div class="button-container">
-      <button @click="showEditMovieModal = true">Edit</button>
-      <button @click="showDeleteMovieModal = true">Remove</button>
+  <div class="col-md-4 col-sm-6 g-3">
+    <div class="card bg-dark text-white h-100 shadow">
+      <div class="card-body">
+        <h4 class="card-title">{{ movie?.title }}</h4>
+        <p class="card-text">
+          <strong>Director:</strong> {{ movie?.director }}<br />
+          <strong>Year:</strong> {{ movie?.year }}<br />
+          <strong>Rate:</strong> {{ movie?.rate }}/10
+        </p>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-info btn-sm"
+          data-bs-toggle="modal"
+          :data-bs-target="`#editModal-${movie.id}`"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger btn-sm"
+          data-bs-toggle="modal"
+          :data-bs-target="`#deleteModal-${movie.id}`"
+        >
+          Remove
+        </button>
+      </div>
     </div>
-    <DeleteMovieModal v-if="showDeleteMovieModal" :show="showDeleteMovieModal" :movie="movie" @confirm-delete="deleteMovie" @cancel="showDeleteMovieModal = false" />
-    <EditMovieModal v-if="showEditMovieModal" :show="showEditMovieModal" :movie="movie" @edit-movie="editMovie" @cancel="showEditMovieModal = false" />
+
+    <DeleteMovieModal :movie="movie" @delete-movie="deleteMovie" />
+    <EditMovieModal :movie="movie" @edit-movie="editMovie" />
   </div>
 </template>
 
 <script>
-import DeleteMovieModal from './DeleteMovieModal.vue';
-import EditMovieModal from './EditMovieModal.vue';
+import DeleteMovieModal from "./DeleteMovieModal.vue";
+import EditMovieModal from "./EditMovieModal.vue";
 
 export default {
   components: { DeleteMovieModal, EditMovieModal },
-  props: ['movie'],
-  data() {
-    return {
-      showDeleteMovieModal: false,
-      showEditMovieModal: false
-    }
-  },
+  props: ["movie"],
   methods: {
     deleteMovie() {
-      this.$emit('delete-movie', this.movie.id);
+      if (!this.movie || !this.movie.id) return;
+      this.$emit("delete-movie", this.movie.id);
     },
     editMovie(movie) {
-    this.$emit('edit-movie', movie);
-  }
-  }
-}
+      if (!movie) return;
+      this.$emit("edit-movie", movie);
+    },
+  },
+};
 </script>

@@ -1,24 +1,60 @@
 <template>
-  <div class="modal-box-overlay" v-if="show">
-    <div class="modal-box">
-      <h2>Confirm Removal</h2>
-      <p>Are you sure you want to remove {{ movie.title }}?</p>
-      <button @click="confirmDelete">Yes, remove</button>
-      <button @click="cancel">Cancel</button>
+  <div
+    class="modal fade"
+    :id="`deleteModal-${movie.id}`"
+    tabindex="-1"
+    aria-labelledby="deleteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Movie</h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to remove
+          <strong>{{ movie?.title || "this item" }}</strong
+          >?
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-sm"
+            @click="confirmDelete"
+            data-bs-dismiss="modal"
+          >
+            Remove Movie
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['show', 'movie'],
+  props: {
+    movie: Object,
+  },
   methods: {
     confirmDelete() {
-      this.$emit('confirm-delete');
+      if (this.movie) {
+        this.$emit("delete-movie");
+      }
     },
-    cancel() {
-      this.$emit('cancel');
-    }
-  }
-}
+  },
+};
 </script>
