@@ -7,11 +7,11 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      appTitle: "Movie Library",
-    };
-  },
-};
+  export default {
+    data() {
+      return {
+        appTitle: "Movie Library",
+      };
+    },
+  };
 </script>

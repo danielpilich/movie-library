@@ -10,20 +10,16 @@
         </p>
       </div>
       <div class="card-footer d-flex justify-content-between">
-        <button
-          type="button"
-          class="btn btn-outline-info btn-sm"
-          data-bs-toggle="modal"
-          :data-bs-target="`#editModal-${movie.id}`"
-        >
+        <button type="button"
+                class="btn btn-outline-info btn-sm"
+                data-bs-toggle="modal"
+                :data-bs-target="`#editModal-${movie.id}`">
           Edit
         </button>
-        <button
-          type="button"
-          class="btn btn-outline-danger btn-sm"
-          data-bs-toggle="modal"
-          :data-bs-target="`#deleteModal-${movie.id}`"
-        >
+        <button type="button"
+                class="btn btn-outline-danger btn-sm"
+                data-bs-toggle="modal"
+                :data-bs-target="`#deleteModal-${movie.id}`">
           Remove
         </button>
       </div>
@@ -35,21 +31,21 @@
 </template>
 
 <script>
-import DeleteMovieModal from "./DeleteMovieModal.vue";
-import EditMovieModal from "./EditMovieModal.vue";
+  import DeleteMovieModal from "./DeleteMovieModal.vue";
+  import EditMovieModal from "./EditMovieModal.vue";
 
-export default {
-  components: { DeleteMovieModal, EditMovieModal },
-  props: ["movie"],
-  methods: {
-    deleteMovie() {
-      if (!this.movie || !this.movie.id) return;
-      this.$emit("delete-movie", this.movie.id);
+  export default {
+    components: { DeleteMovieModal, EditMovieModal },
+    props: ["movie"],
+    methods: {
+      deleteMovie() {
+        if (!this.movie || !this.movie.id) return;
+        this.$emit("delete-movie", this.movie.id);
+      },
+      editMovie(movie) {
+        if (!movie) return;
+        this.$emit("edit-movie", movie);
+      },
     },
-    editMovie(movie) {
-      if (!movie) return;
-      this.$emit("edit-movie", movie);
-    },
-  },
-};
+  };
 </script>

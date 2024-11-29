@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "/mymovies",
+  baseURL: "/movies",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

@@ -1,108 +1,130 @@
 <script>
-import AddMovieModal from "./AddMovieModal.vue";
-import MovieItem from "./MovieItem.vue";
-import apiClient from "@/server.config";
+  import AddMovieModal from "./AddMovieModal.vue";
+  import MovieItem from "./MovieItem.vue";
+  import apiClient from "@/server.config";
 
-export default {
-  components: {
-    MovieItem,
-    AddMovieModal,
-  },
-  data() {
-    return {
-      post: [],
-      newMovies: [],
-      movies: [],
-      addMovieMessageSent: false,
-      error: null,
-    };
-  },
-  methods: {
-    async getMovies() {
-      try {
-        const response = await apiClient.get("/");
-        this.newMovies = response.data.filter(
-          (movie) => !this.movies.some((m) => m.id === movie.id)
-        );
-        this.movies = [...this.movies, ...this.newMovies];
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-        this.error = "Failed to load movies.";
-      }
+  export default {
+    components: {
+      MovieItem,
+      AddMovieModal,
     },
-
-    addMovie(newMovie) {
-      if (newMovie) {
-        this.newMovie = newMovie;
-        const newMovieId =
-          this.movies.length === 0
-            ? 1
-            : Math.max(...this.movies.map((movie) => movie.id)) + 1;
-
-        const movie = {
-          id: newMovieId,
-          title: newMovie.title,
-          director: newMovie.director,
-          year: newMovie.year,
-          rate: newMovie.rate,
-        };
-        this.movies.push(movie);
-        this.addMovieMessageSent = true;
-      }
+    data() {
+      return {
+        loading: false,
+        movies: [],
+        error: null,
+      };
     },
-    editMovie(editedMovie) {
-      if (editedMovie) {
-        const index = this.movies.findIndex(
-          (movie) => movie.id === editedMovie.id
-        );
-        if (index !== -1) {
-          this.movies.splice(index, 1, editedMovie);
+    methods: {
+      async getMovies() {
+        try {
+          const response = await apiClient.get("/");
+          this.movies = response.data;
+        } catch (error) {
+          console.error("Error fetching movies:", error);
+          this.error = "Failed to load movies.";
         }
-      }
+      },
+
+      async getSampleMovies() {
+        try {
+          this.loading = true;
+          const response = await apiClient.post("/sampleMovies");
+          this.movies.push(response.data);
+        } catch (error) {
+          console.error("Error fetching movies:", error);
+          this.error = "Failed to load movies.";
+        } finally {
+          await this.getMovies();
+          this.loading = false;
+        }
+      },
+
+      async addMovie(newMovie) {
+        try {
+          const response = await apiClient.post("/", newMovie);
+          this.movies.push(response.data);
+        } catch (error) {
+          console.error(
+            "Error adding movie:",
+            error.response?.data || error.message
+          );
+          this.error = "Failed to add movie.";
+        } finally {
+          await this.getMovies();
+        }
+      },
+
+      async editMovie(updatedMovie) {
+        try {
+          await apiClient.put(`/${updatedMovie.id}`, updatedMovie);
+          const index = this.movies.findIndex(
+            (movie) => movie.id === updatedMovie.id
+          );
+          if (index !== -1) {
+            this.movies.splice(index, 1, updatedMovie);
+          }
+        } catch (error) {
+          console.error(
+            "Error editing movie:",
+            error.response?.data || error.message
+          );
+          this.error = "Failed to update movie.";
+        } finally {
+          await this.getMovies();
+        }
+      },
+
+      async deleteMovie(id) {
+        try {
+          await apiClient.delete(`/${id}`);
+          this.movies = this.movies.filter((movie) => movie.id !== id);
+        } catch (error) {
+          console.error(
+            "Error deleting movie:",
+            error.response?.data || error.message
+          );
+          this.error = "Failed to delete movie.";
+        } finally {
+          await this.getMovies();
+        }
+      },
     },
-    deleteMovie(id) {
-      if (id) {
-        this.movies = this.movies.filter((movie) => movie.id !== id);
-      }
-    }
-  }
-};
+    async mounted() {
+      await this.getMovies();
+    },
+  };
 </script>
 
 <template>
   <div class="container py-4" id="app-main">
     <div class="d-flex justify-content-center gap-3 mb-4">
-      <button
-        type="button"
-        class="btn btn-outline-success btn-sm"
-        data-bs-toggle="modal"
-        data-bs-target="#addModal"
-      >
-        Add Movie
+      <button type="button"
+              class="btn btn-outline-success btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#addModal">
+        <span class="sr-only">Add Movie</span>
       </button>
-
-      <button
-        type="button"
-        class="btn btn-outline-light btn-sm"
-        @click="getMovies"
-      >
-        Get Movies
+      <button type="button"
+              class="btn btn-outline-light btn-sm"
+              @click="getSampleMovies">
+        <span v-if="loading"
+              class="spinner-border spinner-border-sm"></span>
+        <span>Get Movies</span>
       </button>
     </div>
-    
+
     <AddMovieModal @add-movie="addMovie" />
 
     <hr />
 
     <div class="row">
-      <MovieItem
-        v-for="movie in movies"
-        :key="movie.id"
-        :movie="movie"
-        @delete-movie="deleteMovie"
-        @edit-movie="editMovie"
-        class="movie-item"
-      />
+      <MovieItem v-for="movie in movies"
+                 :key="movie.id"
+                 :movie="movie"
+                 @delete-movie="deleteMovie"
+                 @edit-movie="editMovie"
+                 class="movie-item" />
     </div>
   </div>
 </template>
