@@ -1,35 +1,35 @@
-# movie-library.client
+# Movie Library
 
-This template should help get you started developing with Vue 3 in Vite.
+I present my first approach to the Vue.js framework 😃. 
 
-## Recommended IDE Setup
+The application presents a simple videos library, where we can add, edit and delete movies of our choice. It is also possible to download sample films from an external API.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Feel free to clone the repo and test project on your own!
 
-## Customize configuration
+## How to run the project?
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+1. Clone the repo - Select the folder where you want to clone the repository and run the following command:
 
 ```sh
-npm install
+git clone https://github.com/danielpilich/movie-library.git
 ```
 
-### Compile and Hot-Reload for Development
+2. Go to the server directory - go through the movie-library directory, and then to movie-library.Server, as in the following command:
 
 ```sh
-npm run dev
+cd movie-library/movie-library.Server
 ```
 
-### Compile and Minify for Production
+3. Set up the database - When you are in the server folder, just run this line:
 
 ```sh
-npm run build
+dotnet ef database update
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+4. Finally, launch the project
 
 ```sh
-npm run lint
+dotnet run
 ```
+
+5. Open the website in your browser - Use the link that appears on the command line (starts with https://localhost).
