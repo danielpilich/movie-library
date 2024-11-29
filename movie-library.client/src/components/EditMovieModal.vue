@@ -4,7 +4,7 @@
     :id="`editModal-${movie.id}`"
     tabindex="-1"
     aria-labelledby="editModalLabel"
-    aria-hidden="true"
+    ref="modal"
   >
     <div class="modal-dialog">
       <div class="modal-content bg-dark text-white">
@@ -80,10 +80,19 @@
             Close
           </button>
           <button
+            v-if="!v$.$error"
             type="button"
             class="btn btn-outline-info btn-sm"
             data-bs-dismiss="modal"
             @click="editMovie"
+          >
+            Edit Movie
+          </button>
+          <button
+            v-else
+            type="button"
+            class="btn btn-outline-info btn-sm"
+            disabled
           >
             Edit Movie
           </button>
@@ -135,6 +144,9 @@ export default {
         this.editedMovie = {};
       }
     },
+  },
+  mounted() {
+    this.v$.$touch();
   },
 };
 </script>

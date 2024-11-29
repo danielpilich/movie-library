@@ -82,10 +82,19 @@
             Close
           </button>
           <button
+            v-if="!v$.$error"
             type="button"
             class="btn btn-outline-success btn-sm"
             data-bs-dismiss="modal"
             @click="addMovie"
+          >
+            Add Movie
+          </button>
+          <button
+            v-else
+            type="button"
+            class="btn btn-outline-success btn-sm"
+            disabled
           >
             Add Movie
           </button>
@@ -136,6 +145,9 @@ export default {
         };
       }
     },
+  },
+  mounted() {
+    this.v$.$touch();
   },
 };
 </script>
